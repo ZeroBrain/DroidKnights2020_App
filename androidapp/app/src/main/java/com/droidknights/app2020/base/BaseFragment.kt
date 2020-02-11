@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.droidknights.app2020.BR
 import com.droidknights.app2020.ext.assistedViewModels
+import com.example.lifecycle.LifecycleController
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 import kotlin.reflect.KClass
@@ -21,7 +22,11 @@ abstract class BaseFragment<VM : ViewModel, B : ViewDataBinding>(
 ) : DaggerFragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-    protected val viewModel: VM by assistedViewModels(viewModelClass) { viewModelFactory }
+    @Inject
+    lateinit var dispatcherProvider: DefaultDispatcherProvider
+
+    private val lifecycleController by lazy { LifecycleController(dispatcherProvider.default()) }
+    protected val viewModel: VM by assistedViewModels(lifecycleController, viewModelClass) { viewModelFactory }
 
     protected val binding: B by lazy { DataBindingUtil.bind<B>(view!!)!! }
 
@@ -41,4 +46,24 @@ abstract class BaseFragment<VM : ViewModel, B : ViewDataBinding>(
         }
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        lifecycleController.onInit()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        lifecycleController.onVisible()
+    }
+
+
+    override fun onPause() {
+        lifecycleController.onInvisible()
+        super.onPause()
+    }
+
+    override fun onDestroy() {
+        lifecycleController.onDeinit()
+        super.onDestroy()
+    }
 }

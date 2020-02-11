@@ -1,0 +1,28 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion build_versions.compile_sdk
+    buildToolsVersion build_versions.build_tools
+
+    defaultConfig {
+        minSdkVersion build_versions.min_sdk
+        targetSdkVersion build_versions.target_sdk
+
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+}
+
+dependencies {
+    implementation deps.kotlin.stdlib
+    implementation deps.androidx.appcompat
+    implementation deps.androidx.core_ktx
+
+    implementation deps.kotlin.coroutines.core
+
+    // test
+    testImplementation deps.atsl.junit
+    testImplementation deps.kotlin.coroutines.test
+}

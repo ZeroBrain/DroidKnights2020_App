@@ -92,6 +92,10 @@ ext.build_versions = [
         target_sdk : 29
 ]
 
+def local = [:]
+local.lifecycle = ":lifecycle-observer"
+ext.local = local
+
 // repository
 def addRepos(RepositoryHandler handler) {
     handler.google()

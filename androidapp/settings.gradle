@@ -1,2 +1,3 @@
 rootProject.name='DroidKnights2020'
 include ':app'
+include ':lifecycle-observer'

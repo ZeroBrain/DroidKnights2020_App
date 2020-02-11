@@ -35,6 +35,8 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(local.lifecycle)
+
     implementation deps.kotlin.stdlib
 
     // Jetpack

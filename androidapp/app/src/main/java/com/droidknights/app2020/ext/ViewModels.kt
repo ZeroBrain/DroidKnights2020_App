@@ -8,6 +8,7 @@ import androidx.fragment.app.createViewModelLazy
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.lifecycle.LifecycleController
 import kotlin.reflect.KClass
 
 inline fun <reified T : ViewModel> ComponentActivity.assistedActivityViewModels(
@@ -17,6 +18,14 @@ inline fun <reified T : ViewModel> ComponentActivity.assistedActivityViewModels(
 }
 
 inline fun <VM : ViewModel> Fragment.assistedViewModels(
+    viewModelClass: KClass<VM>,
+    crossinline body: () -> ViewModelProvider.Factory
+): Lazy<VM> {
+    return createViewModelLazy(viewModelClass, { viewModelStore }) { body() }
+}
+
+inline fun <VM : ViewModel> Fragment.assistedViewModels(
+    lifecycleController: LifecycleController,
     viewModelClass: KClass<VM>,
     crossinline body: () -> ViewModelProvider.Factory
 ): Lazy<VM> {

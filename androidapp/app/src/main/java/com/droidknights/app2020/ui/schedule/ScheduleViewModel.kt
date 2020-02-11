@@ -7,13 +7,17 @@ import com.droidknights.app2020.base.BaseViewModel
 import com.droidknights.app2020.base.DispatcherProvider
 import com.droidknights.app2020.db.SessionRepository
 import com.droidknights.app2020.ui.data.SessionData
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 /**
  * Created by jiyoung on 04/12/2019
  */
-class ScheduleViewModel @Inject constructor(private val dispatchers: DispatcherProvider, repo: SessionRepository) : BaseViewModel() {
+class ScheduleViewModel @Inject constructor(private val dispatchers: DispatcherProvider, val repo: SessionRepository) : BaseViewModel() {
 
     val sessionListData : LiveData<List<SessionData>> = liveData {
         repo.get().collect { emit(it) }
@@ -25,4 +29,5 @@ class ScheduleViewModel @Inject constructor(private val dispatchers: DispatcherP
     fun onClickItem(sessionId: String) {
         _itemEvent.value = sessionId
     }
+
 }
